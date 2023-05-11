@@ -83,8 +83,11 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             statement = connection.createStatement();
 
-            String SQL = "INSERT INTO user(name,lastname,age) " +
-                    "VALUES ('" + name + "', '" + lastName + "', " + age + ")";
+            String SQL = new StringBuilder()
+                    .append("INSERT INTO user(name,lastname,age) ")
+                    .append("VALUES ('").append(name).append("', '")
+                    .append(lastName).append("', ")
+                    .append(age).append(")").toString();
 
             statement.executeUpdate(SQL);
             connection.commit();
