@@ -91,10 +91,6 @@ public class UserDaoJDBCImpl implements UserDao {
             String SQL = "TRUNCATE user";
             statement.executeUpdate(SQL);
 
-//            Альтернативный вариант
-//            String SQL = "DELETE FROM user";
-//            statement.executeUpdate(SQL);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
