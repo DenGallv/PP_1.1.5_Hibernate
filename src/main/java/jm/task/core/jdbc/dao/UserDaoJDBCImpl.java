@@ -110,7 +110,6 @@ public class UserDaoJDBCImpl implements UserDao {
             String SQL = "SELECT * FROM user";
 
             ResultSet resultSet = statement.executeQuery(SQL);
-            connection.commit();
 
             while (resultSet.next()) {
                 User user = new User();
@@ -122,13 +121,6 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
         return userList;
     }
