@@ -11,15 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Statement statement;
     private Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = new StringBuilder()
                     .append("CREATE TABLE IF NOT EXISTS`kata_db`.`user` (\n")
@@ -40,20 +38,11 @@ public class UserDaoJDBCImpl implements UserDao {
                     ex.printStackTrace();
                 }
             }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     public void dropUsersTable() {
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = "DROP TABLE IF EXISTS user";
 
@@ -68,20 +57,11 @@ public class UserDaoJDBCImpl implements UserDao {
                     ex.printStackTrace();
                 }
             }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = new StringBuilder()
                     .append("INSERT INTO user(name,lastname,age) ")
@@ -101,20 +81,11 @@ public class UserDaoJDBCImpl implements UserDao {
                     ex.printStackTrace();
                 }
             }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     public void removeUserById(long id) {
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = "DELETE FROM user WHERE id = " + id + "";
 
@@ -129,21 +100,12 @@ public class UserDaoJDBCImpl implements UserDao {
                     ex.printStackTrace();
                 }
             }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = "SELECT * FROM user";
 
@@ -167,21 +129,12 @@ public class UserDaoJDBCImpl implements UserDao {
                     ex.printStackTrace();
                 }
             }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return userList;
     }
 
     public void cleanUsersTable() {
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
 
             String SQL = "TRUNCATE user";
 
@@ -194,14 +147,6 @@ public class UserDaoJDBCImpl implements UserDao {
                     connection.rollback();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
-                }
-            }
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             }
         }
