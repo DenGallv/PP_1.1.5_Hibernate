@@ -3,15 +3,12 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection = Util.getConnection();
+    private final Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
     }
@@ -61,15 +58,14 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = connection.createStatement()) {
+        String SQL = "INSERT INTO user(name,lastName,age) VALUES (?,?,?)";
 
-            String SQL = new StringBuilder()
-                    .append("INSERT INTO user(name,lastname,age) ")
-                    .append("VALUES ('").append(name).append("', '")
-                    .append(lastName).append("', ")
-                    .append(age).append(")").toString();
+        try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setByte(3, age);
+            statement.executeUpdate();
 
-            statement.executeUpdate(SQL);
             connection.commit();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (Exception e) {
@@ -85,11 +81,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try (Statement statement = connection.createStatement()) {
 
-            String SQL = "DELETE FROM user WHERE id = " + id + "";
+        String SQL = "DELETE FROM user WHERE id = ?";
 
-            statement.executeUpdate(SQL);
+        try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();

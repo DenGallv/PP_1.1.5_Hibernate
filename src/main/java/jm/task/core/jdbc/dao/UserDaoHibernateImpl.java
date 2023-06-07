@@ -9,7 +9,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private SessionFactory sessionFactory = Util.getSessionFactory();
+    private final SessionFactory sessionFactory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
 
@@ -46,9 +46,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession();) {
             transaction = session.beginTransaction();
 
-            String SQL = "DROP TABLE IF EXISTS User";
+            String HQL = "DROP TABLE IF EXISTS User";
 
-            session.createSQLQuery(SQL).executeUpdate();
+            session.createSQLQuery(HQL).executeUpdate();
 
             transaction.commit();
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession();) {
             transaction = session.beginTransaction();
 
-            session.save(new User(name, lastName, age));
+            session.persist(new User(name, lastName, age));
 
             transaction.commit();
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession();) {
             transaction = session.beginTransaction();
 
-            session.delete(session.get(User.class, id));
+            session.remove(session.get(User.class, id));
 
             transaction.commit();
         } catch (Exception e) {
@@ -113,9 +113,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession();) {
             transaction = session.beginTransaction();
 
-            String SQL = "DELETE FROM User";
+            String HQL = "DELETE FROM User";
 
-            session.createQuery(SQL).executeUpdate();
+            session.createQuery(HQL).executeUpdate();
 
             transaction.commit();
         } catch (Exception e) {
